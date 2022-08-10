@@ -1,0 +1,3 @@
+[submodule "fastmoe"]
+	path = fastmoe
+	url = https://github.com/laekov/fastmoe

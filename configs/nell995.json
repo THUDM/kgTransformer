@@ -1,0 +1,177 @@
+{
+  "default": {
+    "root_dir": "/raid/sshockwave",
+    "moe_num_expert": 32,
+    "moe_top_k": 2,
+    "hidden_size": 1024,
+    "data_dir": "/raid/sshockwave/NELL-q2b",
+    "lr": 1e-4,
+    "exponential_lr_rate": 0.997,
+    "norm": false,
+    "num_layers": 8,
+    "loss": "LS",
+    "smoothing": 0.7
+  },
+  "pretrain": {
+    "base": "default",
+    "type": "pretrain",
+    "num_epoch": 1000,
+    "batch_size": 64,
+    "num_workers": 160,
+    "downstream_task_name": "pretrained/NELL_reproduce_pretrain",
+    "pretrain_sampler_ratio": {
+      "1p": 10,
+      "2p": 10,
+      "3p": 10,
+      "2i": 1,
+      "3i": 1
+    }
+  },
+  "reasoning": {
+    "base": "default",
+    "type": "reasoning",
+    "batch_size": 3072,
+    "grad_accum": 4,
+    "num_workers": 10,
+    "num_epoch": 1,
+    "lr": 1e-5,
+    "upstream_task_name": "pretrained/NELL_reproduce_pretrain"
+  },
+  "reasoning_single": {
+    "base": "reasoning",
+    "upstream_task_name": "finetuned/NELL_reproduce_multi",
+    "from_best": true,
+    "save_best": true
+  },
+  "test_all": {
+    "base": "reasoning",
+    "reasoning_test_modes": [
+      "1p",
+      "2p",
+      "3p",
+      "2i",
+      "3i",
+      "ip",
+      "pi",
+      "2u",
+      "up"
+    ],
+    "downstream_task_name": "pretrained/NELL_reproduce_pretrain",
+    "type": "test-reasoning"
+  },
+  "reasoning_multi": {
+    "base": "reasoning",
+    "num_epoch": 30,
+    "lr": 1e-5,
+    "save_interval": 1,
+    "downstream_task_name": "finetuned/NELL_reproduce_multi",
+    "reasoning_test_modes": []
+  },
+  "reasoning_1p": {
+    "base": "reasoning",
+    "type": "test-reasoning",
+    "from_best": true,
+    "downstream_task_name": "finetuned/NELL_reproduce_multi",
+    "reasoning_test_modes": [
+      "1p"
+    ]
+  },
+  "reasoning_2p": {
+    "base": "reasoning_single",
+    "num_epoch": 15,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_2p",
+    "reasoning_train_modes": [
+      "1p",
+      "2p"
+    ],
+    "reasoning_test_modes": [
+      "2p"
+    ]
+  },
+  "reasoning_3p": {
+    "base": "reasoning_single",
+    "num_epoch": 20,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_3p",
+    "reasoning_train_modes": [
+      "1p",
+      "2p",
+      "3p"
+    ],
+    "reasoning_test_modes": [
+      "3p"
+    ]
+  },
+  "reasoning_2i": {
+    "base": "reasoning_single",
+    "num_epoch": 15,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_2i",
+    "reasoning_train_modes": [
+      "2i"
+    ],
+    "reasoning_test_modes": [
+      "2i"
+    ]
+  },
+  "reasoning_3i": {
+    "base": "reasoning_single",
+    "num_epoch": 15,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_3i",
+    "batch_size": 512,
+    "grad_accum": 24,
+    "reasoning_train_modes": [
+      "3i"
+    ],
+    "reasoning_test_modes": [
+      "3i"
+    ]
+  },
+  "reasoning_ip": {
+    "base": "reasoning_single",
+    "num_epoch": 40,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_ip",
+    "reasoning_train_modes": [
+      "1p",
+      "2p"
+    ],
+    "reasoning_test_modes": [
+      "ip"
+    ]
+  },
+  "reasoning_pi": {
+    "base": "reasoning_single",
+    "num_epoch": 20,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_pi",
+    "reasoning_train_modes": [
+      "1p"
+    ],
+    "reasoning_test_modes": [
+      "pi"
+    ]
+  },
+  "reasoning_2u": {
+    "base": "reasoning_single",
+    "num_epoch": 10,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_2u",
+    "batch_size": 1536,
+    "grad_accum": 8,
+    "reasoning_train_modes": [
+      "1p"
+    ],
+    "reasoning_test_modes": [
+      "2u"
+    ]
+  },
+  "reasoning_up": {
+    "base": "reasoning_single",
+    "num_epoch": 20,
+    "downstream_task_name": "finetuned/NELL_reproduce_finetune_up",
+    "batch_size": 1536,
+    "grad_accum": 8,
+    "reasoning_train_modes": [
+      "2p"
+    ],
+    "reasoning_test_modes": [
+      "up"
+    ]
+  }
+}

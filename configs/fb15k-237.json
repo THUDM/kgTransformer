@@ -1,0 +1,188 @@
+{
+  "default": {
+    "root_dir": "/raid/sshockwave",
+    "moe_num_expert": 32,
+    "moe_top_k": 2,
+    "hidden_size": 1024,
+    "data_dir": "/raid/sshockwave/FB15k-237-q2b",
+    "lr": 1e-4,
+    "exponential_lr_rate": 0.997,
+    "smoothing": 0.1,
+    "num_layers": 8
+  },
+  "pretrain1": {
+    "base": "default",
+    "type": "pretrain",
+    "downstream_task_name": "pretrained/FB15k237_camera_pretrain1",
+    "num_epoch": 400,
+    "num_workers": 160,
+    "batch_size": 128,
+    "loss": "LS",
+    "pretrain_sampler_ratio": {
+      "meta_tree": 1,
+      "ladies": 1
+    }
+  },
+  "pretrain2": {
+    "base": "pretrain1",
+    "num_epoch": 800,
+    "upstream_task_name": "pretrained/FB15k237_camera_pretrain1",
+    "downstream_task_name": "pretrained/FB15k237_camera_pretrain2",
+    "pretrain_sampler_ratio": {
+      "1p": 4,
+      "2p": 4,
+      "3p": 2,
+      "2i": 1,
+      "3i": 1
+    }
+  },
+  "reasoning": {
+    "base": "default",
+    "type": "reasoning",
+    "upstream_task_name": "pretrained/FB15k237_camera_pretrain2",
+    "batch_size": 12288,
+    "num_workers": 10,
+    "num_epoch": 1
+  },
+  "reasoning_single": {
+    "base": "reasoning",
+    "from_best": true,
+    "save_best": true
+  },
+  "test_pretrain": {
+    "base": "reasoning",
+    "type": "test-reasoning",
+    "downstream_task_name": "pretrained/FB15k237_camera_pretrain2",
+    "batch_size": 3072,
+    "num_workers": 10
+  },
+  "reasoning_multi_1e5": {
+    "base": "reasoning",
+    "lr": 1e-5,
+    "downstream_task_name": "finetuned/FB15k237_camera_multi_1e5lr",
+    "reasoning_test_modes": [],
+    "num_epoch": 10,
+    "save_interval": 1
+  },
+  "reasoning_multi_1e6": {
+    "base": "reasoning",
+    "lr": 1e-6,
+    "downstream_task_name": "finetuned/FB15k237_camera_multi_1e6lr",
+    "reasoning_test_modes": [],
+    "num_epoch": 20,
+    "save_interval": 1
+  },
+  "reasoning_1p": {
+    "base": "reasoning",
+    "type": "test-reasoning",
+    "from_best": true,
+    "downstream_task_name": "finetuned/FB15k237_camera_multi_1e6lr",
+    "reasoning_test_modes": [
+      "1p"
+    ]
+  },
+  "reasoning_2p": {
+    "base": "reasoning_single",
+    "upstream_task_name": "finetuned/FB15k237_camera_multi_1e6lr",
+    "downstream_task_name": "finetuned/FB15k237_camera_ft_2p",
+    "reasoning_train_modes": [
+      "1p",
+      "2p"
+    ],
+    "reasoning_test_modes": [
+      "2p"
+    ],
+    "num_epoch": 10,
+    "lr": 1e-5
+  },
+  "reasoning_3p": {
+    "base": "reasoning_single",
+    "upstream_task_name": "finetuned/FB15k237_camera_multi_1e5lr",
+    "downstream_task_name": "finetuned/FB15k237_camera_ft_3p",
+    "reasoning_train_modes": [
+      "1p",
+      "2p",
+      "3p"
+    ],
+    "reasoning_test_modes": [
+      "3p"
+    ],
+    "num_epoch": 10,
+    "lr": 1e-5
+  },
+  "reasoning_2i": {
+    "base": "reasoning_single",
+    "upstream_task_name": "finetuned/FB15k237_camera_multi_1e6lr",
+    "downstream_task_name": "finetuned/FB15k237_camera_ft_2i",
+    "reasoning_train_modes": [
+      "2i"
+    ],
+    "reasoning_test_modes": [
+      "2i"
+    ],
+    "batch_size": 3072,
+    "num_epoch": 20,
+    "lr": 1e-5
+  },
+  "reasoning_3i": {
+    "base": "reasoning_single",
+    "upstream_task_name": "finetuned/FB15k237_camera_multi_1e5lr",
+    "downstream_task_name": "finetuned/FB15k237_camera_ft_3i",
+    "reasoning_train_modes": [
+      "3i"
+    ],
+    "reasoning_test_modes": [
+      "3i"
+    ],
+    "batch_size": 3072,
+    "num_epoch": 10,
+    "lr": 1e-5
+  },
+  "reasoning_ip": {
+    "base": "reasoning_single",
+    "upstream_task_name": "finetuned/FB15k237_camera_multi_1e5lr",
+    "downstream_task_name": "finetuned/FB15k237_camera_ft_ip",
+    "reasoning_train_modes": [
+      "1p",
+      "2p",
+      "3p"
+    ],
+    "reasoning_test_modes": [
+      "ip"
+    ],
+    "num_epoch": 10,
+    "lr": 1e-6
+  },
+  "reasoning_pi": {
+    "base": "reasoning_single",
+    "upstream_task_name": "finetuned/FB15k237_camera_multi_1e6lr",
+    "downstream_task_name": "finetuned/FB15k237_camera_ft_pi",
+    "reasoning_train_modes": [
+      "1p",
+      "2p"
+    ],
+    "reasoning_test_modes": [
+      "pi"
+    ],
+    "num_epoch": 10,
+    "lr": 1e-6
+  },
+  "reasoning_2u": {
+    "base": "reasoning",
+    "type": "test-reasoning",
+    "downstream_task_name": "finetuned/FB15k237_camera_multi_1e6lr",
+    "from_best": true,
+    "reasoning_test_modes": [
+      "2u"
+    ]
+  },
+  "reasoning_up": {
+    "base": "reasoning",
+    "type": "test-reasoning",
+    "downstream_task_name": "finetuned/FB15k237_camera_multi_1e6lr",
+    "from_best": true,
+    "reasoning_test_modes": [
+      "up"
+    ]
+  }
+}
