@@ -1,7 +1,7 @@
 # kgTransformer
 
 This is the original implementation for KDD 2022 paper
-_Mask and Reason: Pre-Training Knowledge Graph Transformers for Complex Logical Queries_.
+_[Mask and Reason: Pre-Training Knowledge Graph Transformers for Complex Logical Queries](http://keg.cs.tsinghua.edu.cn/jietang/publications/KDD22-Liu-et-al-KG-Transformer.pdf)_.
 
 ## Prerequisites
 
