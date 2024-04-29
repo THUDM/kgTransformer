@@ -8,6 +8,7 @@ _[Mask and Reason: Pre-Training Knowledge Graph Transformers for Complex Logical
 * `pytorch>=1.7.1,<=1.9`
     * Note: Pytorch version greater than 1.9 has OOM bugs. See https://github.com/pytorch/pytorch/issues/67680.
 * `pytorch-geometric`
+    * See [PyG](https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html) implementation. For older PyTorch version, check out [here](https://data.pyg.org/whl/)
 * `fastmoe`
 
 Example installation using [`conda`](https://conda.io):
